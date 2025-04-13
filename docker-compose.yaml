@@ -16,7 +16,7 @@ services:
   wordpress:
     depends_on:
       - db
-    image: wordpress:5.1.1-fpm-alpine
+    image: wordpress:php8.4-fpm-alpine
     container_name: wordpress
     restart: unless-stopped
     env_file: .env
@@ -27,7 +27,15 @@ services:
       - WORDPRESS_DB_NAME=wordpress
     volumes:
       - wordpress:/var/www/html
-      - ./Powerpress:/var/www/html/wp-content/plugins/Powerpress
+      - type: bind
+        source: ./plugins
+        target: /var/www/html/wp-content/plugins
+      - type: bind
+        source: ./themes
+        target: /var/www/html/wp-content/themes
+      - type: bind
+        source: ./php/docker-conf.ini
+        target: /usr/local/etc/php/conf.d/docker-conf.ini
     networks:
       - app-network
   webserver:
@@ -40,8 +48,13 @@ services:
       - "80:80"
     volumes:
       - wordpress:/var/www/html
+      - type: bind
+        source: ./plugins
+        target: /var/www/html/wp-content/plugins
+      - type: bind
+        source: ./themes
+        target: /var/www/html/wp-content/themes
       - ./nginx-conf:/etc/nginx/conf.d
-      - ./Powerpress:/var/www/html/wp-content/plugins/Powerpress
     networks:
       - app-network
 volumes:
