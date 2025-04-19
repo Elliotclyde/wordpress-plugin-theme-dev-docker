@@ -45,7 +45,7 @@ services:
     container_name: webserver
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "8000:80"
     volumes:
       - wordpress:/var/www/html
       - type: bind
@@ -55,6 +55,17 @@ services:
         source: ./themes
         target: /var/www/html/wp-content/themes
       - ./nginx-conf:/etc/nginx/conf.d
+    networks:
+      - app-network
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: unless-stopped
+    environment:
+      - PMA_USER=$MYSQL_USER
+      - PMA_PASSWORD=$MYSQL_PASSWORD
+      - PMA_HOST=db:3306
+    ports:
+      - "8080:80"
     networks:
       - app-network
 volumes:
