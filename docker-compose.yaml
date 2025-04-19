@@ -57,17 +57,19 @@ services:
       - ./nginx-conf:/etc/nginx/conf.d
     networks:
       - app-network
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
-    restart: unless-stopped
-    environment:
-      - PMA_USER=$MYSQL_USER
-      - PMA_PASSWORD=$MYSQL_PASSWORD
-      - PMA_HOST=db:3306
-    ports:
-      - "8080:80"
-    networks:
-      - app-network
+  # Probably not a good idea to run phpmyadmin in production
+  # but if you want to, uncomment the following lines
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin:latest
+  #   restart: unless-stopped
+  #   environment:
+  #     - PMA_USER=$MYSQL_USER
+  #     - PMA_PASSWORD=$MYSQL_PASSWORD
+  #     - PMA_HOST=db:3306
+  #   ports:
+  #     - "8080:80"
+  #   networks:
+  #     - app-network
 volumes:
   wordpress:
   dbdata:
